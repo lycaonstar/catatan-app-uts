@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catatan App</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 560px; margin: 2rem auto; padding: 0 1rem; }
+    form { display: flex; gap: .5rem; }
+    input { flex: 1; padding: .5rem; }
+    li { display: flex; justify-content: space-between; padding: .4rem 0; border-bottom: 1px solid #ddd; }
+    button { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Catatan App</h1>
+  <form id="f"><input id="t" placeholder="Tulis catatan..." required><button>Tambah</button></form>
+  <ul id="list"></ul>
+  <script>
+    const list = document.getElementById('list');
+    async function load() {
+      const notes = await (await fetch('/api/notes')).json();
+      list.innerHTML = '';
+      notes.forEach((n) => {
+        const li = document.createElement('li');
+        const span = document.createElement('span');
+        span.textContent = n.text;
+        const b = document.createElement('button');
+        b.textContent = 'Hapus';
+        b.onclick = async () => { await fetch('/api/notes/' + n.id, { method: 'DELETE' }); load(); };
+        li.append(span, b);
+        list.appendChild(li);
+      });
+    }
+    document.getElementById('f').onsubmit = async (e) => {
+      e.preventDefault();
+      const t = document.getElementById('t');
+      await fetch('/api/notes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: t.value }) });
+      t.value = '';
+      load();
+    };
+    load();
+  </script>
+</body>
+</html>

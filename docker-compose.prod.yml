@@ -1,0 +1,9 @@
+# Dipakai oleh tahap CD di server: image diambil dari GitHub Container Registry
+# IMAGE disuplai oleh pipeline, contoh: ghcr.io/<user>/catatan-app:latest
+services:
+  app:
+    image: ${IMAGE}
+    container_name: catatan-app
+    ports:
+      - "80:3000"
+    restart: unless-stopped

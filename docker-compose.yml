@@ -1,0 +1,8 @@
+# Untuk development lokal: docker compose up --build
+services:
+  app:
+    build: .
+    image: catatan-app:local
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
