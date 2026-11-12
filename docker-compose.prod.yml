@@ -5,5 +5,5 @@ services:
     image: ${IMAGE}
     container_name: catatan-app
     ports:
-      - "80:3000"
+      - "8080:3000"
     restart: unless-stopped
